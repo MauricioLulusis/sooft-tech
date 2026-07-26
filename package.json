@@ -1,0 +1,49 @@
+{
+  "name": "@sooft/cli",
+  "version": "0.1.0",
+  "description": "AI agent assets manager for Sooft Technology — distribute engineering rules & lifecycle hooks to any AI coding agent. npx sooft add owner/repo",
+  "type": "module",
+  "publishConfig": {
+    "access": "public"
+  },
+  "bin": {
+    "sooft": "./bin/sooft.mjs"
+  },
+  "main": "./src/index.mjs",
+  "exports": {
+    ".": "./src/index.mjs",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "bin",
+    "src",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "sooft": "node bin/sooft.mjs",
+    "test": "node tests/run-all.mjs",
+    "lint": "node --check bin/sooft.mjs"
+  },
+  "keywords": [
+    "cli",
+    "sooft",
+    "ai-engineering",
+    "ai-agents",
+    "agent-hooks",
+    "steering",
+    "rules",
+    "claude-code",
+    "cursor"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "license": "MIT",
+  "author": "Sooft Technology",
+  "homepage": "https://sooft.tech",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sooft-tech/sooft.git"
+  }
+}
