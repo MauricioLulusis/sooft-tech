@@ -48,6 +48,55 @@ export const AGENTS = {
 
 export const DEFAULT_AGENT = 'claude';
 
+/**
+ * `sooft agent` — the standards installer. Distributes the Sooft Engineering AI
+ * Rails content (skills, subagents, hooks, instructions) into each tool's native
+ * location. Capabilities differ per tool; a missing key means "this tool doesn't
+ * take that artifact". Placement is recorded in the manifest for exact removal.
+ */
+export const TOOLS = {
+  claude: {
+    label: 'Claude Code',
+    detect: ['.claude', 'CLAUDE.md'],
+    skillsDir: '.claude/skills', // auto-discovered by Claude Code
+    agentsDir: '.claude/agents', // *.md subagents
+  },
+  copilot: {
+    label: 'GitHub Copilot',
+    detect: ['.github/copilot-instructions.md', '.github'],
+    agentsDir: '.github/agents', // *.agent.md
+    instructions: '.github/copilot-instructions.md',
+    promptsDir: '.github/prompts', // *.prompt.md
+    hooksDir: '.github/hooks', // sooft.json + banner.txt
+  },
+  cursor: {
+    label: 'Cursor',
+    detect: ['.cursor'],
+    rulesFile: '.cursor/rules/sooft-ai-rails.mdc',
+  },
+  kiro: {
+    label: 'Kiro',
+    detect: ['.kiro'],
+    rulesFile: '.kiro/steering/sooft-ai-rails.md',
+  },
+  windsurf: {
+    label: 'Windsurf',
+    detect: ['.windsurf'],
+    rulesFile: '.windsurf/rules/sooft-ai-rails.md',
+  },
+  agents: {
+    label: 'Generic (.agents)',
+    detect: ['.agents'],
+    skillsDir: '.agents/skills',
+  },
+};
+
+/** Tools installed to when nothing is detected and no --agent/--all is given. */
+export const DEFAULT_TOOLS = ['claude', 'copilot'];
+
+/** Manifest key under which an `agent install` records its placements. */
+export const STANDARDS_PACK = 'sooft-ai-standards';
+
 /** Exit codes — frozen contract for scripts and CI. */
 export const EXIT = {
   ok: 0,

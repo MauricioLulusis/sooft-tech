@@ -74,10 +74,44 @@ sooft remove sooft-standards            # clean removal
 sooft doctor                            # environment + workspace health
 ```
 
+## Sooft AI Rails — one command, every tool
+
+`sooft agent install` distributes the **Sooft Engineering AI Rails** methodology
+(the [`sooft-ai-standards`](https://github.com/sooft-tech/sooft-ai-standards) repo —
+skills, subagents, hooks and instructions) into **every** AI coding tool it detects:
+Claude Code, GitHub Copilot (CLI + VS Code), Cursor, Kiro, Windsurf, and generic
+`.agents/`. Each tool gets the artifacts in its **native** location.
+
+```bash
+sooft agent source sooft-tech/sooft-ai-standards   # set the source once (repo, git URL, or path)
+sooft agent install                                # install into every detected tool
+sooft agent install --all                          # ...or force all supported tools
+sooft agent install --dry-run                      # preview the plan, write nothing
+sooft agent update                                 # re-install, replacing the previous placement
+sooft agent remove                                 # remove exactly what was placed
+```
+
+| Tool | Gets |
+| --- | --- |
+| **Claude Code** | skills → `.claude/skills/`, subagents → `.claude/agents/` |
+| **GitHub Copilot** | subagents, prompts, hooks → `.github/`, instructions → `.github/copilot-instructions.md` |
+| **Cursor** | rules → `.cursor/rules/sooft-ai-rails.mdc` |
+| **Kiro** | steering → `.kiro/steering/sooft-ai-rails.md` |
+| **Windsurf** | rules → `.windsurf/rules/sooft-ai-rails.md` |
+| **Generic** | skills → `.agents/skills/` |
+
+Every placement is recorded in `.sooft/manifest.json`, so `agent remove` is exact
+and reversible. The methodology enforces human **approval gates** (PRD → SPEC →
+PLAN → code → review): the agent never writes code without an approved plan.
+
 ## Commands
 
 | Command | Description |
 | --- | --- |
+| `agent install` | Install Sooft AI Rails into every detected AI tool (`--all`, `--dry-run`) |
+| `agent update` | Re-install the standards, replacing the previous placement |
+| `agent remove` | Remove everything the standards install placed |
+| `agent source [url]` | Show or set the standards source (`owner/repo`, git URL, or path) |
 | `init [name]` | Scaffold a Sooft asset pack (`sooft.pack.json` + rules + hooks) |
 | `add <source>` | Install a pack from `owner/repo[/subdir][@ref]`, a git URL, or a local path — plan → approve → merge |
 | `list`, `ls` | Installed packs per scope, with placement summary |

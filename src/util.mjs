@@ -46,6 +46,46 @@ export function copyFile(from, to) {
   fs.copyFileSync(from, to);
 }
 
+/** Recursively copy a directory tree (files + subdirs). */
+export function copyDir(from, to) {
+  ensureDir(to);
+  for (const entry of fs.readdirSync(from, { withFileTypes: true })) {
+    const src = path.join(from, entry.name);
+    const dest = path.join(to, entry.name);
+    if (entry.isDirectory()) copyDir(src, dest);
+    else if (entry.isFile()) copyFile(src, dest);
+  }
+}
+
+/** Recursively remove a directory. Best-effort, silent. */
+export function removeDir(p) {
+  try {
+    fs.rmSync(p, { recursive: true, force: true });
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+export function listDirs(p) {
+  try {
+    return fs.readdirSync(p, { withFileTypes: true }).filter((e) => e.isDirectory()).map((e) => e.name);
+  } catch {
+    return [];
+  }
+}
+
+export function listFiles(p, ext) {
+  try {
+    return fs
+      .readdirSync(p, { withFileTypes: true })
+      .filter((e) => e.isFile() && (!ext || e.name.endsWith(ext)))
+      .map((e) => e.name);
+  } catch {
+    return [];
+  }
+}
+
 export function removeFile(p) {
   try {
     fs.rmSync(p, { force: true });

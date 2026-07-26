@@ -11,6 +11,7 @@ import { listCommand } from './commands/list.mjs';
 import { removeCommand } from './commands/remove.mjs';
 import { checkCommand } from './commands/check.mjs';
 import { doctorCommand } from './commands/doctor.mjs';
+import { agentCommand } from './commands/agent.mjs';
 
 const COMMANDS = {
   init: initCommand,
@@ -21,6 +22,7 @@ const COMMANDS = {
   rm: removeCommand,
   check: checkCommand,
   doctor: doctorCommand,
+  agent: agentCommand,
 };
 
 /**
@@ -54,6 +56,12 @@ export function parseArgs(argv) {
         break;
       case '--dry-run':
         flags.dryRun = true;
+        break;
+      case '--all':
+        flags.all = true;
+        break;
+      case '--reset':
+        flags.reset = true;
         break;
       case '--json':
         flags.json = true;

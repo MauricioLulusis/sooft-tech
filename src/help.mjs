@@ -4,6 +4,10 @@ import { bold, cyan, dim } from './colors.mjs';
 import { BRAND } from './constants.mjs';
 
 const COMMANDS = [
+  ['agent install', 'Install Sooft AI Rails (skills, subagents, hooks) into every AI tool'],
+  ['agent update', 'Re-install the standards, replacing the previous placement'],
+  ['agent remove', 'Remove everything the standards install placed'],
+  ['agent source [url]', 'Show or set the standards source (owner/repo, git URL, path)'],
   ['init [name]', 'Scaffold a Sooft asset pack (rules + hooks) to publish'],
   ['add <source>', 'Install a pack from owner/repo, a git URL, or a local path'],
   ['list', 'List installed packs and where they were placed'],
@@ -14,9 +18,11 @@ const COMMANDS = [
 
 const FLAGS = [
   ['-g, --global', 'Operate on the user home scope instead of this repo'],
-  ['--agent <name>', 'Target a specific agent (claude, cursor) — repeatable'],
+  ['--agent <name>', 'Target a tool (claude, copilot, cursor, kiro, windsurf) — repeatable'],
+  ['--all', 'Target every supported tool (agent install)'],
   ['-y, --yes', 'Skip the approval prompt (automation)'],
   ['--dry-run', 'Print the plan and write nothing'],
+  ['--reset', 'Reset the standards source (agent source --reset)'],
   ['--json', 'Machine-readable output where supported'],
   ['--no-banner', 'Hide the wordmark banner'],
   ['-v, --version', 'Print version'],
