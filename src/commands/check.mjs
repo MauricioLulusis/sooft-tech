@@ -24,7 +24,8 @@ export function checkCommand(args) {
   heading('  Check');
   let drift = 0;
   for (const p of packs) {
-    info(`  ${bold(cyan(p.name))} ${dim('v' + p.version)}`);
+    const version = p.version ? ` ${dim('v' + p.version)}` : '';
+    info(`  ${bold(cyan(p.name))}${version}`);
     for (const rec of Object.values(p.agents || {})) {
       for (const rule of rec.rules || []) {
         if (!exists(rule.path)) {
@@ -35,6 +36,19 @@ export function checkCommand(args) {
           drift++;
         } else {
           bullet(`${green('ok')} ${dim(rule.path)}`);
+        }
+      }
+    }
+    for (const rec of Object.values(p.tools || {})) {
+      for (const item of rec.paths || []) {
+        if (!exists(item.path)) {
+          bullet(`${red('missing')} ${dim(item.path)}`);
+          drift++;
+        } else if (item.sha && hashFile(item.path) !== item.sha) {
+          bullet(`${yellow('modified')} ${dim(item.path)}`);
+          drift++;
+        } else {
+          bullet(`${green('ok')} ${dim(item.path)}`);
         }
       }
     }

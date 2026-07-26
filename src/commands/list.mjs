@@ -23,12 +23,17 @@ export function listCommand(args) {
   info();
   heading(`  Installed packs ${dim('(' + packs.length + ')')}`);
   for (const p of packs) {
-    info(`  ${bold(cyan(p.name))} ${dim('v' + p.version)}  ${dim('← ' + p.source)}`);
+    const version = p.version ? dim('v' + p.version) + '  ' : '';
+    info(`  ${bold(cyan(p.name))} ${version}${dim('← ' + p.source)}`);
     for (const [agent, rec] of Object.entries(p.agents || {})) {
       const parts = [];
       if (rec.rules && rec.rules.length) parts.push(`${rec.rules.length} rule(s)`);
       if (rec.hooks && rec.hooks.length) parts.push(`hooks: ${rec.hooks.join(', ')}`);
       bullet(`${green(agent)} ${dim('— ' + (parts.join('; ') || 'no placements'))}`);
+    }
+    for (const [tool, rec] of Object.entries(p.tools || {})) {
+      const count = (rec.paths || []).length;
+      bullet(`${green(tool)} ${dim(`— ${count} item(s) placed`)}`);
     }
   }
   info();

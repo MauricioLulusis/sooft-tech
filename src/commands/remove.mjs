@@ -4,6 +4,7 @@ import { EXIT } from '../constants.mjs';
 import { baseRoot } from '../agents.mjs';
 import { unmergeHooks } from '../merge.mjs';
 import { readManifest, writeManifest, getPackRecord, removePackRecord } from '../manifest.mjs';
+import { wipe } from './agent.mjs';
 import { info, success, warn, step, bullet } from '../ui.mjs';
 import { dim, red, bold } from '../colors.mjs';
 
@@ -37,6 +38,7 @@ export function removeCommand(args) {
       if (removed.length) bullet(`${red('-')} ${dim('hooks from ' + path.relative(root, rec.settings))}`);
     }
   }
+  if (record.tools) wipe(record, root);
 
   removePackRecord(manifest, name);
   writeManifest(root, manifest);

@@ -1,5 +1,5 @@
 import path from 'node:path';
-import { copyDir, copyFile, writeText, readText, removeFile, removeDir, pruneEmptyDir } from '../util.mjs';
+import { copyDir, copyFile, writeText, readText, removeFile, removeDir, pruneEmptyDir, sha256, hashFile } from '../util.mjs';
 import { EXIT, STANDARDS_PACK } from '../constants.mjs';
 import { resolveSource } from '../source.mjs';
 import { resolveStandards, instructionsAsRule } from '../standards.mjs';
@@ -169,18 +169,20 @@ function summarize(ops) {
   return lines;
 }
 
-/** Execute a tool plan; return the list of {path, kind} written (for the manifest). */
+/** Execute a tool plan; return the list of {path, kind, sha?} written (for the manifest). */
 function applyToolPlan(t) {
   const written = [];
   for (const op of t.ops) {
     if (op.kind === 'dir') {
       copyDir(op.from, op.to);
+      written.push({ path: op.to, kind: op.kind });
     } else if (op.content !== undefined) {
       writeText(op.to, op.content);
+      written.push({ path: op.to, kind: op.kind, sha: sha256(op.content) });
     } else {
       copyFile(op.from, op.to);
+      written.push({ path: op.to, kind: op.kind, sha: hashFile(op.to) });
     }
-    written.push({ path: op.to, kind: op.kind });
   }
   return written;
 }
@@ -203,7 +205,7 @@ function removeStandards(args) {
 }
 
 /** Delete everything a standards record placed. Returns the count removed. */
-function wipe(record, root) {
+export function wipe(record, root) {
   let n = 0;
   for (const rec of Object.values(record.tools || {})) {
     for (const item of rec.paths || []) {
